@@ -42,7 +42,7 @@ using namespace std;
 #define HORIZONTAL_LINE (char)196
 #define VERTICAL_LINE (char)179
 
-
+string MENUFILE[4] = {"NewGame.txt", "LoadGame.txt", "About.txt", "Exit.txt"};
 struct _BufferInfo {
 	int col;
 	int row;
@@ -56,8 +56,9 @@ struct _Point {
 
 struct _Menu {
 	int items;
+	int highColor;
 	int color;
-	int vertical_Or_horizontal; // check x?p d?c hay ngang
+	int align; // check xep doc(1) hay ngang(0)
 };
 
 

@@ -180,10 +180,12 @@ void DrawFromFile(string filename, int color, int x, int y)
 }
 
 
-_Menu GetMenuProperties(int items, int color) {
+_Menu GetMenuProperties(int items, int highColor, int color, int align) {
 	_Menu menu;
 	menu.items = items;
+	menu.highColor = highColor;
 	menu.color = color;
+	menu.align = align;
 	return menu;
 }
 void MenuHighlight(int k)
@@ -296,14 +298,13 @@ void DrawBoard(int row, int col, int width, int height, int x, int y)
 }
 void NewGame()
 {
-	// char a[16], b[16];
-
-	// printf("Nhap ten nguoi choi thu nhat (2 - 16 ki tu)");
-	// scanf_s("%s", &a);
-	// system("cls");
-	// printf("Nhap ten nguoi choi thu nhat (2 - 16 ki tu)");
-	// scanf_s("%s", &b);
-	// system("cls");
+	char a[16], b[16];
+	printf("Nhap ten nguoi choi thu nhat (2 - 16 ki tu)");
+	scanf_s("%s", &a);
+	system("cls");
+	printf("Nhap ten nguoi choi thu nhat (2 - 16 ki tu)");
+	scanf_s("%s", &b);
+	system("cls");
 	DrawBoard(10, 10, 7, 3, 0, 0);
 }
 void RunMenu()
@@ -387,22 +388,22 @@ void End_game(int kq)
 		break;
 	case 0:
 		system("cls");
-		DrawFromFile("Draw.txt", 240, bf.col / 2 - 30, bf.row / 2 - 10);
+		DrawFromFile("Draw.txt", 240, bf.col / 2 - 22, bf.row / 2 - 10);
 		AskContinueBox();
 		break;
 	case 2:
 		system("cls");
-		DrawFromFile("OWin.txt", 240, bf.col / 2 - 30, bf.row / 2 - 10);
+		DrawFromFile("OWin.txt", 240, bf.col / 2 - 32, bf.row / 2 - 10);
 		AskContinueBox();
 		break;
 	case -1:
 		system("cls");
-		DrawFromFile("PWin.txt", 240, bf.col / 2 - 30, bf.row / 2 - 10);
+		DrawFromFile("PWin.txt", 240, bf.col / 2 - 35, bf.row / 2 - 10);
 		AskContinueBox();
 		break;
 	case -2:
 		system("cls");
-		DrawFromFile("PLose.txt", 240, bf.col / 2 - 30, bf.row / 2 - 10);
+		DrawFromFile("PLose.txt", 240, bf.col / 2 - 39, bf.row / 2 - 10);
 		AskContinueBox();
 		break;
 	default:
@@ -432,7 +433,6 @@ int main()
 	CreateConsoleWindow(CONSOLE_WIDTH, CONSOLE_HEIGHT);
 	FixConsoleWindow();
 	system("cls");
-	printf("p\np\np\np\np\np\np\np\np\np\np\np\np\np\np\n");
 	HideCursor(false);
 	// RunMenu();
 	End_game(-1);
