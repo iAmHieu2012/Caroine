@@ -58,7 +58,7 @@ _BufferInfo GetConsoleSize()
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
 	int columns, rows;
 
-	GetConsoleScreen_BufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
+	GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
 	columns = csbi.srWindow.Right - csbi.srWindow.Left + 1;
 	rows = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
 	_BufferInfo bf = {columns, rows};
