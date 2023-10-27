@@ -1,4 +1,4 @@
-﻿#include "Data.h"
+#include "Data.h"
 
 void CreateConsoleWindow(int pWidth, int pHeight)
 {
@@ -8,7 +8,7 @@ void CreateConsoleWindow(int pWidth, int pHeight)
 	HANDLE hConsole;						 // khai bao bien hConsole kieu HANDLE
 
 	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);				// lay quyen dieu khien output tieu chuan
-	SetConsoleTextAttribute(hConsole, 15 * 16 + 1);			// set thuoc tinh cua text, 240 là nen trang chu den
+	SetConsoleTextAttribute(hConsole, 15 * 16 + 1);			// set thuoc tinh cua text, 240 la nen trang chu den
 	GetWindowRect(consoleWindow, &r);						// truy xuat kich thuoc gioi han cua console
 	MoveWindow(consoleWindow, 0, 0, pWidth, pHeight, TRUE); // di chuyen con tro toi toa do (0;0) va set kich thuoc window
 }
@@ -141,9 +141,8 @@ void DrawFromFile(string filename, int color, int x, int y)
 		while (1)
 		{
 			// Do file text animation co 4 frames nen moi co /4 ,%4...
-			turn = turn % 4;
 			for (int i = 0; i < line1.size() / 4; i++)
-				PrintText(line1[i + 9 * turn], color + turn % 15, x, y++);
+				PrintText(line1[i + 9 * (turn % 4)], color + turn % 15, x, y++);
 			y = tempY;
 			Sleep(500);
 			/*
