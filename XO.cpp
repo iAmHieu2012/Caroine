@@ -78,13 +78,14 @@ vector<string> ReadFile(string filename)
 	return line1;
 }
 
-void DrawBox(int color, int width, int height, int x, int y, int delay)
+void DrawBox(int color, int subcolor, int width, int height, int x, int y, int delay)
 {
 	// ve box co vien theo mau
-	SetColor(color);
+	
 	GotoXY(x, y);
 
 	// Ve canh tren
+	SetColor(subcolor);
 	for (int i = 0; i < width; i++)
 	{
 		cout << " ";
@@ -93,34 +94,36 @@ void DrawBox(int color, int width, int height, int x, int y, int delay)
 	for (int i = 1; i <= height; i++)
 	{
 		Sleep(delay);
-		GotoXY(x, y + i);
+		GotoXY(x, y + i);		
+		SetColor(subcolor);
 		cout << " ";
-		SetColor(14 * 16 + 14);
+		SetColor(color);//14 * 16 + 14
 		for (int j = 0; j < width - 2; j++)
 		{
 			cout << " ";
 		}
-		SetColor(color);
+		SetColor(subcolor);
 		cout << " ";
-		SetColor(8 * 16 + 2);
+		SetColor(8 * 16 + 2);// Shadowing
 		cout << " ";
-		SetColor(color);
 	}
-	SetColor(color);
-	GotoXY(x, y + height + 1);
+
+	// Ve canh duoi
+	GotoXY(x, y + height + 1);	
+	SetColor(subcolor);
 	Sleep(delay);
 	for (int i = 0; i < width; i++)
 	{
 		cout << " ";
 	}
-	SetColor(8 * 16 + 2);
+	SetColor(8 * 16 + 2);// Shadowing
 	cout << " ";
-	for (int i = 1; i <= width; i++)
+	for (int i = 1; i <= width; i++) // Shadowing
 	{
 		GotoXY(x + i, y + height + 2);
 		cout << " ";
 	}
-	SetColor(240);
+	SetColor(240);// Set default color
 }
 void PrintText(string text, int color, int x, int y)
 {
@@ -135,7 +138,7 @@ void DrawFromFile(string filename, int color, int x, int y)
 	int tempY = y;
 	vector<string> line1 = ReadFile(filename);
 
-	if (filename == "XWin.txt" || filename == "OWin.txt" || filename == "Draw.txt" || filename == "PWin.txt" || filename == "PLose.txt")
+	if (filename == "./Graphic/XWin.txt" || filename == "./Graphic/OWin.txt" || filename == "./Graphic/Draw.txt" || filename == "./Graphic/PWin.txt" || filename == "./Graphic/PLose.txt")
 	{
 		int turn = 0;
 		while (1)
@@ -193,22 +196,22 @@ void MenuHighlight(int k)
 	switch (k)
 	{
 	case 1:
-		DrawFromFile("NewGame.txt", 252, (bf.col - (int)ReadFile("NewGame.txt")[1].length()) / 2, bf.row - 30);
-		DrawFromFile("LoadGame.txt", 240, (bf.col - (int)ReadFile("LoadGame.txt")[1].length()) / 2, bf.row - 25);
+		DrawFromFile("./Graphic/NewGame.txt", 252, (bf.col - (int)ReadFile("./Graphic/NewGame.txt")[1].length()) / 2, bf.row - 30);
+		DrawFromFile("./Graphic/LoadGame.txt", 240, (bf.col - (int)ReadFile("./Graphic/LoadGame.txt")[1].length()) / 2, bf.row - 25);
 		break;
 	case 2:
-		DrawFromFile("NewGame.txt", 240, (bf.col - (int)ReadFile("NewGame.txt")[1].length()) / 2, bf.row - 30);
-		DrawFromFile("LoadGame.txt", 252, (bf.col - (int)ReadFile("LoadGame.txt")[1].length()) / 2, bf.row - 25);
-		DrawFromFile("About.txt", 240, (bf.col - (int)ReadFile("About.txt")[1].length()) / 2, bf.row - 20);
+		DrawFromFile("./Graphic/NewGame.txt", 240, (bf.col - (int)ReadFile("./Graphic/NewGame.txt")[1].length()) / 2, bf.row - 30);
+		DrawFromFile("./Graphic/LoadGame.txt", 252, (bf.col - (int)ReadFile("./Graphic/LoadGame.txt")[1].length()) / 2, bf.row - 25);
+		DrawFromFile("./Graphic/About.txt", 240, (bf.col - (int)ReadFile("./Graphic/About.txt")[1].length()) / 2, bf.row - 20);
 		break;
 	case 3:
-		DrawFromFile("LoadGame.txt", 240, (bf.col - (int)ReadFile("LoadGame.txt")[1].length()) / 2, bf.row - 25);
-		DrawFromFile("About.txt", 252, (bf.col - (int)ReadFile("About.txt")[1].length()) / 2, bf.row - 20);
-		DrawFromFile("Exit.txt", 240, (bf.col - (int)ReadFile("Exit.txt")[1].length()) / 2, bf.row - 15);
+		DrawFromFile("./Graphic/LoadGame.txt", 240, (bf.col - (int)ReadFile("./Graphic/LoadGame.txt")[1].length()) / 2, bf.row - 25);
+		DrawFromFile("./Graphic/About.txt", 252, (bf.col - (int)ReadFile("./Graphic/About.txt")[1].length()) / 2, bf.row - 20);
+		DrawFromFile("./Graphic/Exit.txt", 240, (bf.col - (int)ReadFile("./Graphic/Exit.txt")[1].length()) / 2, bf.row - 15);
 		break;
 	case 4:
-		DrawFromFile("About.txt", 240, (bf.col - (int)ReadFile("About.txt")[1].length()) / 2, bf.row - 20);
-		DrawFromFile("Exit.txt", 252, (bf.col - (int)ReadFile("Exit.txt")[1].length()) / 2, bf.row - 15);
+		DrawFromFile("./Graphic/About.txt", 240, (bf.col - (int)ReadFile("./Graphic/About.txt")[1].length()) / 2, bf.row - 20);
+		DrawFromFile("./Graphic/Exit.txt", 252, (bf.col - (int)ReadFile("./Graphic/Exit.txt")[1].length()) / 2, bf.row - 15);
 		break;
 	}
 }
@@ -216,7 +219,7 @@ int MenuAction()
 {
 	_BufferInfo bf = GetConsoleSize();
 	int k = 1;
-	DrawFromFile("NewGame.txt", 252, (bf.col - (int)ReadFile("NewGame.txt")[1].length()) / 2, bf.row - 30);
+	DrawFromFile("./Graphic/NewGame.txt", 252, (bf.col - (int)ReadFile("./Graphic/NewGame.txt")[1].length()) / 2, bf.row - 30);
 	do
 	{
 		int cmd = toupper(_getch());
@@ -240,10 +243,10 @@ int MainMenu()
 {
 	_BufferInfo bf = GetConsoleSize();
 	DrawFromFile("Logo.txt", 240, (bf.col - (int)ReadFile("Logo.txt")[1].length()) / 2, 0);
-	DrawFromFile("NewGame.txt", 240, (bf.col - (int)ReadFile("NewGame.txt")[1].length()) / 2, bf.row - 30);
-	DrawFromFile("LoadGame.txt", 240, (bf.col - (int)ReadFile("LoadGame.txt")[1].length()) / 2, bf.row - 25);
-	DrawFromFile("About.txt", 240, (bf.col - (int)ReadFile("About.txt")[1].length()) / 2, bf.row - 20);
-	DrawFromFile("Exit.txt", 240, (bf.col - (int)ReadFile("Exit.txt")[1].length()) / 2, bf.row - 15);
+	DrawFromFile("./Graphic/NewGame.txt", 240, (bf.col - (int)ReadFile("./Graphic/NewGame.txt")[1].length()) / 2, bf.row - 30);
+	DrawFromFile("./Graphic/LoadGame.txt", 240, (bf.col - (int)ReadFile("./Graphic/LoadGame.txt")[1].length()) / 2, bf.row - 25);
+	DrawFromFile("./Graphic/About.txt", 240, (bf.col - (int)ReadFile("./Graphic/About.txt")[1].length()) / 2, bf.row - 20);
+	DrawFromFile("./Graphic/Exit.txt", 240, (bf.col - (int)ReadFile("./Graphic/Exit.txt")[1].length()) / 2, bf.row - 15);
 	int k = MenuAction();
 	return k;
 }
@@ -324,19 +327,19 @@ void YesNoHighlight(int k)
 	switch (k)
 	{
 	case 1:
-		DrawFromFile("Yes.txt", 7 * 16 + 12, (bf.col - 60) / 2, (bf.row - 20));
-		DrawFromFile("No.txt", 14 * 16 + 0, (bf.col + 15) / 2, (bf.row - 20));
+		DrawFromFile("./Graphic/Yes.txt", 7 * 16 + 12, (bf.col - 60) / 2, (bf.row - 20));
+		DrawFromFile("./Graphic/No.txt", 14 * 16 + 0, (bf.col + 15) / 2, (bf.row - 20));
 		break;
 	case 2:
-		DrawFromFile("Yes.txt", 14 * 16 + 0, (bf.col - 60) / 2, (bf.row - 20));
-		DrawFromFile("No.txt", 7 * 16 + 12, (bf.col + 15) / 2, (bf.row - 20));
+		DrawFromFile("./Graphic/Yes.txt", 14 * 16 + 0, (bf.col - 60) / 2, (bf.row - 20));
+		DrawFromFile("./Graphic/No.txt", 7 * 16 + 12, (bf.col + 15) / 2, (bf.row - 20));
 		break;
 	}
 }
 int AskContinueAction()
 {
 	_BufferInfo bf = GetConsoleSize();
-	DrawFromFile("Yes.txt", 7 * 16 + 12, (bf.col - 60) / 2, (bf.row - 20));
+	DrawFromFile("./Graphic/Yes.txt", 7 * 16 + 12, (bf.col - 60) / 2, (bf.row - 20));
 	fflush(stdin);
 	int k = 1;
 	do
@@ -362,11 +365,11 @@ int AskContinueAction()
 void AskContinueBox()
 {
 	_BufferInfo bf = GetConsoleSize();
-	DrawBox(16, 100, 15, (bf.col - 100) / 2, (bf.row - 15) / 2, 50);
+	DrawBox(14 * 16 + 14, 16, 100, 15, (bf.col - 100) / 2, (bf.row - 15) / 2, 50);
 
-	DrawFromFile("Continue.txt", 14 * 16 + 5, (bf.col - 80) / 2, (bf.row - 28));
-	DrawFromFile("Yes.txt", 14 * 16 + 0, (bf.col - 60) / 2, (bf.row - 20));
-	DrawFromFile("No.txt", 14 * 16 + 0, (bf.col + 15) / 2, (bf.row - 20));
+	DrawFromFile("./Graphic/Continue.txt", 14 * 16 + 5, (bf.col - 80) / 2, (bf.row - 28));
+	DrawFromFile("./Graphic/Yes.txt", 14 * 16 + 0, (bf.col - 60) / 2, (bf.row - 20));
+	DrawFromFile("./Graphic/No.txt", 14 * 16 + 0, (bf.col + 15) / 2, (bf.row - 20));
 	int Action = AskContinueAction();
 	if (Action == 1)
 		printf("Tiep tuc");
@@ -382,27 +385,27 @@ void End_game(int kq)
 	{
 	case 1:
 		system("cls");
-		DrawFromFile("XWin.txt", 240, bf.col / 2 - 30, bf.row / 2 - 10);
+		DrawFromFile("./Graphic/XWin.txt", 240, bf.col / 2 - 30, bf.row / 2 - 10);
 		AskContinueBox();
 		break;
 	case 0:
 		system("cls");
-		DrawFromFile("Draw.txt", 240, bf.col / 2 - 22, bf.row / 2 - 10);
+		DrawFromFile("./Graphic/Draw.txt", 240, bf.col / 2 - 22, bf.row / 2 - 10);
 		AskContinueBox();
 		break;
 	case 2:
 		system("cls");
-		DrawFromFile("OWin.txt", 240, bf.col / 2 - 32, bf.row / 2 - 10);
+		DrawFromFile("./Graphic/OWin.txt", 240, bf.col / 2 - 32, bf.row / 2 - 10);
 		AskContinueBox();
 		break;
 	case -1:
 		system("cls");
-		DrawFromFile("PWin.txt", 240, bf.col / 2 - 35, bf.row / 2 - 10);
+		DrawFromFile("./Graphic/PWin.txt", 240, bf.col / 2 - 35, bf.row / 2 - 10);
 		AskContinueBox();
 		break;
 	case -2:
 		system("cls");
-		DrawFromFile("PLose.txt", 240, bf.col / 2 - 39, bf.row / 2 - 10);
+		DrawFromFile("./Graphic/PLose.txt", 240, bf.col / 2 - 39, bf.row / 2 - 10);
 		AskContinueBox();
 		break;
 	default:
@@ -434,7 +437,7 @@ int main()
 	system("cls");
 	HideCursor(false);
 	// RunMenu();
-	End_game(-1);
+	End_game(1);
 	system("pause");
 	return 0;
 }

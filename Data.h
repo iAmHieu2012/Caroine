@@ -1,4 +1,4 @@
-#pragma once
+#pragma once // giup tranh include nhieu lan
 #ifndef _DATA_H_
 #define _DATA_H_
 
