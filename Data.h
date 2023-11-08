@@ -9,6 +9,10 @@
 #include <vector>
 #include <string>
 #include <conio.h>// _kbhit() va _getch()
+#include <fcntl.h> //_O_U16TEXT
+#include <io.h>    //_setmode()
+#include <locale>
+#include <codecvt>
 
 using namespace std;
 
