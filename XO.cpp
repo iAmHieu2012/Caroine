@@ -77,11 +77,31 @@ vector<string> ReadFile(string filename)
 	textFile.close();
 	return line1;
 }
+vector<wstring> ReadFileUnicode(string filename)
+{
+	// doc file ghi vao vector
+	_setmode(_fileno(stdout), _O_U16TEXT); // needed for output unicode
+	_setmode(_fileno(stdin), _O_U16TEXT);  // needed for input unicode
+	locale loc(locale(), new codecvt_utf8<wchar_t>);
+	// luc nao doc file unicode thi se setmode
+	// ham ReadFileUnicode se duoc goi trong mot ham khac, ham do se co lenh setmode ve ban dau
+
+	std::wfstream textFile;
+	textFile.open(filename.c_str(), std::wfstream::in);
+	wstring line;
+	std::vector<std::wstring> line1;
+	textFile.imbue(loc);
+	while (getline(textFile, line))
+		line1.push_back(line);
+	textFile.close();
+	return line1;
+	// chua can chuyen ve ASCII do con phai in ra man hinh
+}
 
 void DrawBox(int color, int subcolor, int width, int height, int x, int y, int delay)
 {
 	// ve box co vien theo mau
-	
+
 	GotoXY(x, y);
 
 	// Ve canh tren
@@ -94,43 +114,52 @@ void DrawBox(int color, int subcolor, int width, int height, int x, int y, int d
 	for (int i = 1; i <= height; i++)
 	{
 		Sleep(delay);
-		GotoXY(x, y + i);		
+		GotoXY(x, y + i);
 		SetColor(subcolor);
 		cout << " ";
-		SetColor(color);//14 * 16 + 14
+		SetColor(color); // 14 * 16 + 14
 		for (int j = 0; j < width - 2; j++)
 		{
 			cout << " ";
 		}
 		SetColor(subcolor);
 		cout << " ";
-		SetColor(8 * 16 + 2);// Shadowing
+		SetColor(8 * 16 + 2); // Shadowing
 		cout << " ";
 	}
 
 	// Ve canh duoi
-	GotoXY(x, y + height + 1);	
+	GotoXY(x, y + height + 1);
 	SetColor(subcolor);
 	Sleep(delay);
 	for (int i = 0; i < width; i++)
 	{
 		cout << " ";
 	}
-	SetColor(8 * 16 + 2);// Shadowing
+	SetColor(8 * 16 + 2); // Shadowing
 	cout << " ";
 	for (int i = 1; i <= width; i++) // Shadowing
 	{
 		GotoXY(x + i, y + height + 2);
 		cout << " ";
 	}
-	SetColor(240);// Set default color
+	SetColor(240); // Set default color
 }
 void PrintText(string text, int color, int x, int y)
 {
-	// in text theo mau va nen
+	// in ascii text theo mau va nen
 	GotoXY(x, y);
 	SetColor(color);
 	cout << text;
+	SetColor(240);
+}
+
+void PrintTextUnicode(wstring text, int color, int x, int y)
+{
+	// in unicode text theo mau va nen
+	GotoXY(x, y);
+	SetColor(color);
+	wcout << text;
 	SetColor(240);
 }
 void DrawFromFile(string filename, int color, int x, int y)
@@ -161,7 +190,7 @@ void DrawFromFile(string filename, int color, int x, int y)
 			Sleep(500);
 			y = tempY;*/
 			turn++;
-			GotoXY(0, y);
+			// GotoXY(0, y);
 			PrintText("Press any key to skip...", 240, x + 40, y + 10);
 			if (_kbhit())
 			{
@@ -180,9 +209,21 @@ void DrawFromFile(string filename, int color, int x, int y)
 		}
 	}
 }
+void DrawFromFileUnicode(string filename, int color, int x, int y)
+{
+	// setmode da duoc goi trong ham ReadFileUnicode nen khong goi lai
+	vector<wstring> line1 = ReadFileUnicode(filename);
+	for (int i = 0; i < line1.size(); i++)
+	{
+		PrintTextUnicode(line1[i], color, x, y);
+		y++;
+	}
+	_setmode(_fileno(stdout), _O_TEXT); // needed for output ASCII
+	_setmode(_fileno(stdin), _O_TEXT);	// needed for input ASCII
+}
 
-
-_Menu GetMenuProperties(int items, int highColor, int color, int align) {
+_Menu GetMenuProperties(int items, int highColor, int color, int align)
+{
 	_Menu menu;
 	menu.items = items;
 	menu.highColor = highColor;
@@ -193,26 +234,20 @@ _Menu GetMenuProperties(int items, int highColor, int color, int align) {
 void MenuHighlight(int k)
 {
 	_BufferInfo bf = GetConsoleSize();
-	switch (k)
+	string fileList[4] = {
+		"./Graphic/NewGame.txt",
+		"./Graphic/LoadGame.txt",
+		"./Graphic/About.txt",
+		"./Graphic/Exit.txt"};
+	short pos[4] = {
+		30, 25, 20, 15};
+
+	for (int i = 0; i < 4; i++)
 	{
-	case 1:
-		DrawFromFile("./Graphic/NewGame.txt", 252, (bf.col - (int)ReadFile("./Graphic/NewGame.txt")[1].length()) / 2, bf.row - 30);
-		DrawFromFile("./Graphic/LoadGame.txt", 240, (bf.col - (int)ReadFile("./Graphic/LoadGame.txt")[1].length()) / 2, bf.row - 25);
-		break;
-	case 2:
-		DrawFromFile("./Graphic/NewGame.txt", 240, (bf.col - (int)ReadFile("./Graphic/NewGame.txt")[1].length()) / 2, bf.row - 30);
-		DrawFromFile("./Graphic/LoadGame.txt", 252, (bf.col - (int)ReadFile("./Graphic/LoadGame.txt")[1].length()) / 2, bf.row - 25);
-		DrawFromFile("./Graphic/About.txt", 240, (bf.col - (int)ReadFile("./Graphic/About.txt")[1].length()) / 2, bf.row - 20);
-		break;
-	case 3:
-		DrawFromFile("./Graphic/LoadGame.txt", 240, (bf.col - (int)ReadFile("./Graphic/LoadGame.txt")[1].length()) / 2, bf.row - 25);
-		DrawFromFile("./Graphic/About.txt", 252, (bf.col - (int)ReadFile("./Graphic/About.txt")[1].length()) / 2, bf.row - 20);
-		DrawFromFile("./Graphic/Exit.txt", 240, (bf.col - (int)ReadFile("./Graphic/Exit.txt")[1].length()) / 2, bf.row - 15);
-		break;
-	case 4:
-		DrawFromFile("./Graphic/About.txt", 240, (bf.col - (int)ReadFile("./Graphic/About.txt")[1].length()) / 2, bf.row - 20);
-		DrawFromFile("./Graphic/Exit.txt", 252, (bf.col - (int)ReadFile("./Graphic/Exit.txt")[1].length()) / 2, bf.row - 15);
-		break;
+		if (i + 1 == k)
+			DrawFromFile(fileList[i], 252, (bf.col -(int)ReadFile(fileList[i])[1].length()) / 2, bf.row - pos[i]);
+		else
+			DrawFromFile(fileList[i], 240, (bf.col -(int)ReadFile(fileList[i])[1].length()) / 2, bf.row - pos[i]);
 	}
 }
 int MenuAction()
@@ -223,15 +258,24 @@ int MenuAction()
 	do
 	{
 		int cmd = toupper(_getch());
-		if ((cmd == 'S' || cmd == ARROW_DOWN) && k < 4)
+		if (cmd == 'S' || cmd == ARROW_DOWN)
 		{
-			k++;
+			if (k == 4)
+				k = 1;
+			else
+				k++;
 			MenuHighlight(k);
+			continue;
 		}
-		else if ((cmd == 'W' || cmd == ARROW_UP) && k > 1)
+		else if (
+			cmd == 'W' || cmd == ARROW_UP)
 		{
-			k--;
+			if (k == 1)
+				k = 4;
+			else
+				k--;
 			MenuHighlight(k);
+			continue;
 		}
 		else if ((cmd == KEY_ENTER))
 		{
@@ -242,7 +286,7 @@ int MenuAction()
 int MainMenu()
 {
 	_BufferInfo bf = GetConsoleSize();
-	DrawFromFile("Logo.txt", 240, (bf.col - (int)ReadFile("Logo.txt")[1].length()) / 2, 0);
+	DrawFromFileUnicode("./Graphic/Logo.txt", 240, (bf.col - (int)ReadFileUnicode("./Graphic/Logo.txt")[1].length()) / 2, 4);
 	DrawFromFile("./Graphic/NewGame.txt", 240, (bf.col - (int)ReadFile("./Graphic/NewGame.txt")[1].length()) / 2, bf.row - 30);
 	DrawFromFile("./Graphic/LoadGame.txt", 240, (bf.col - (int)ReadFile("./Graphic/LoadGame.txt")[1].length()) / 2, bf.row - 25);
 	DrawFromFile("./Graphic/About.txt", 240, (bf.col - (int)ReadFile("./Graphic/About.txt")[1].length()) / 2, bf.row - 20);
@@ -377,11 +421,11 @@ void AskContinueBox()
 		printf("Nghi choi");
 }
 
-void End_game(int kq)
+void End_game(int result)
 {
 	_BufferInfo bf = GetConsoleSize();
 
-	switch (kq)
+	switch (result)
 	{
 	case 1:
 		system("cls");
@@ -412,32 +456,20 @@ void End_game(int kq)
 		break;
 	}
 }
-//#include <iostream>
-//#include <Windows.h>
-//#include <iostream>
-//
-//
-//using namespace std;
-//
-//
-//void main() {
-//	HWND consoleWindow = GetConsoleWindow();
-//	HANDLE hConsole;
-//	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);	// lay quyen dieu khien output tieu chuan
-//	for (int k = 0; k <= 255; k++) {
-//		SetConsoleTextAttribute(hConsole, k);
-//		cout <<k << " HELLO\n" << endl;
-//	}
-//}
 
 int main()
 {
 	CreateConsoleWindow(CONSOLE_WIDTH, CONSOLE_HEIGHT);
 	FixConsoleWindow();
+
 	system("cls");
 	HideCursor(false);
-	// RunMenu();
+	// DrawFromFileUnicode("./Graphic/Logo.txt",240, 0, 0);
+	// system("pause");
+	RunMenu();
 	End_game(1);
+	system("cls");
+	// DrawFromFile("./Graphic/Continue.txt", 14 * 16 + 5, 0, 20);
 	system("pause");
 	return 0;
 }
