@@ -46,7 +46,7 @@ using namespace std;
 #define HORIZONTAL_LINE (char)196
 #define VERTICAL_LINE (char)179
 
-string MENUFILE[4] = {"NewGame.txt", "LoadGame.txt", "About.txt", "Exit.txt"};
+string MENUFILE[4] = {"./Graphic/NewGame.txt", "./Graphic/LoadGame.txt", "./Graphic/About.txt", "./Graphic/Exit.txt"};
 struct _BufferInfo {
 	int col;
 	int row;
