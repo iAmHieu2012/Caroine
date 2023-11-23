@@ -33,7 +33,6 @@ using namespace std;
 #define HORIZONTAL_DISTANCE 4
 #define VERTICAL_DISTANCE 2
 
-
 #define TOP_LEFT (char)218
 #define TOP_RIGHT (char)191
 #define BOTTOM_LEFT (char)192

@@ -277,7 +277,7 @@ int MenuAction()
 			MenuHighlight(k);
 			continue;
 		}
-		else if ((cmd == KEY_ENTER))
+		else if (cmd == KEY_ENTER)
 		{
 			return k;
 		}
